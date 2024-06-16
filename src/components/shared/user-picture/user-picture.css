@@ -1,0 +1,47 @@
+.user-icon-wrapper {
+    width: 3.125rem;
+    height: 3.125rem;
+    border-radius: 50%;
+    background-color: var(--icon-background-muted);
+    justify-self: start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-icon {
+    width: 3.125rem;
+    height: 3.125rem;
+    font-size: 1.5rem;
+    color: var(--icon-muted);
+    border-radius: 50%;
+    background-color: var(--icon-background-muted);
+    justify-self: start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    z-index: 1000;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.custom-tooltip-inner {
+    padding: 5px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--text-primary);
+    font-weight: bold;
+
+}

@@ -1,0 +1,29 @@
+.notification {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    justify-content: center;
+    padding: 1.25rem;
+    box-sizing: border-box;
+    border-radius: 0.625rem;
+    /* background-color: var(--background-primary); */
+    box-shadow: 0.0625rem 0.25rem 2.5rem var(--box-shadow-color);
+    color: var(--text-primary);
+    width: 100%;
+
+}
+
+.notifications-container {
+    padding: 0 1.25rem 1rem 1.25rem;
+    overflow-y: auto;
+    flex-grow: 1;
+    height: 0vh;
+
+}
+
+.notifications-container .notification-item:nth-child(even) {
+    border-radius: 5px;
+    background-color: var(--list-row-odd-background);
+}
+
+.notifications-item {}

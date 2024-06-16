@@ -1,0 +1,162 @@
+.navbar {
+	box-sizing: border-box;
+	padding: 0 2.25rem 0 1.5rem;
+	width: 100%;
+	height: 4.375rem;
+	background: var(--background-primary);
+	box-shadow: 0.0625rem 0.25rem 2.5rem var(--box-shadow-color);
+	color: var(--text-primary);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.left-nav,
+.right-nav {
+	display: flex;
+	align-items: center;
+}
+
+.logo {
+	font-family: 'Montserrat', sans-serif;
+	font-style: normal;
+	font-weight: 900;
+	line-height: 2rem;
+	color: #191919;
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	height: 4rem;
+}
+
+.logo img {
+	max-height: 100%;
+	max-width: 100%;
+}
+
+.user-photo span {
+	width: 2.875rem;
+	height: 2.875rem;
+	background-repeat: no-repeat;
+	background-size: cover;
+	justify-content: center;
+}
+
+.user-name,
+.user-login {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+.user-login {
+	margin-right: 2.875rem;
+	cursor: pointer;
+}
+
+.app-name {
+	font-family: "Montserrat", sans-serif;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 1.25rem;
+	line-height: 1.5rem;
+	text-transform: uppercase;
+	color: #456085;
+	margin-left: 0.5rem;
+}
+
+.auth-action {
+	font-family: 'Montserrat', sans-serif;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 1rem;
+	line-height: 1.25rem;
+	color: #191919;
+	cursor: pointer;
+}
+
+.auth-action:hover {
+	text-decoration: underline;
+}
+
+.auth-container {
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+}
+
+.menu-logout {
+	color: red;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+	.navbar {
+		flex-direction: row;
+		height: auto;
+		padding: 0.5rem 1rem;
+		justify-content: space-between;
+	}
+
+	.left-nav,
+	.right-nav {
+		flex-direction: row;
+		align-items: center;
+		width: auto;
+		justify-content: flex-start;
+	}
+
+	.logo {
+		line-height: 1.25rem;
+		font-size: 0.875rem;
+		margin-bottom: 0;
+	}
+
+	.logo img {
+		max-height: 40px;
+		max-width: 80px;
+		height: auto;
+		width: auto;
+	}
+
+	.user-login {
+		margin-right: 0;
+		margin-bottom: 0;
+	}
+
+	.auth-container {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		width: auto;
+	}
+
+	.user-name {
+		font-size: 0.875rem;
+		margin-left: 0.5rem;
+	}
+
+	.right-nav {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		width: auto;
+		gap: 0.5rem;
+	}
+
+	/* Hide user name and connection health on mobile */
+	.user-name,
+	.connection-wrapper {
+		display: none;
+	}
+
+	.btn-container {
+		margin-right: 0.5rem;
+	}
+
+	.app-name {
+		margin-left: 2.5rem;
+	}
+}

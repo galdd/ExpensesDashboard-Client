@@ -1,0 +1,54 @@
+.expense-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.3125rem;
+    font: 700 1.125rem Nunito, sans-serif;
+    justify-content: space-between;
+    color: var(--text-primary);
+    background-color: var(--background-secondary);
+}
+
+.list-name-and-price {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.list-name {
+    margin: 0;
+}
+
+.total-price {
+    color: var(--badge-primary-text);
+    font-family: Nunito, sans-serif;
+    font-weight: 700;
+}
+
+.list-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.list-options-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .expense-list-header {}
+
+    .list-name-and-price {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .list-header-actions {
+        align-self: flex-end;
+        gap: 0.5rem;
+    }
+}

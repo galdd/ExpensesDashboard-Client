@@ -1,0 +1,74 @@
+.expense-list-toolbar {
+    display: flex;
+    gap: 1.25rem;
+    font-size: 0.875rem;
+    text-align: center;
+    justify-content: space-between;
+}
+
+.toolbar-action {
+    display: flex;
+}
+
+.toolbar-sort,
+.toolbar-sort:focus {
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    overflow: hidden;
+    color: var(--button-primary);
+}
+
+.toolbar-sort:focus {
+    border: none;
+}
+
+.tabs {
+    border-radius: 0.625rem;
+    background-color: var(--background-muted);
+    display: flex;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.tab,
+.active {
+    padding: 0.625rem 1.0625rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: Nunito, sans-serif;
+    color: var(--text-secondary);
+    cursor: pointer;
+    min-width: 5rem;
+    border-radius: 0.625rem;
+}
+
+.active {
+    background-color: var(--button-active);
+    color: var(--text-on-primary);
+}
+
+.add-list-button {
+    border-radius: 0.625rem;
+    background-color: var(--button-active);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--text-on-primary);
+    font-weight: 600;
+    padding: 0.625rem 1.0625rem;
+    border: none;
+    cursor: pointer;
+    font-family: Nunito, sans-serif;
+    min-width: 5rem;
+}
+
+.icon {
+    width: 0.5625rem;
+    object-fit: contain;
+}
