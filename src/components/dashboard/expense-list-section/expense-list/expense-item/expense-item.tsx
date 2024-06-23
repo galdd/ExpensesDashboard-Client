@@ -4,7 +4,6 @@ import { UserPicture } from "../../../../shared";
 import { formatDate, formatTime } from "../../../../../utilities/format-time";
 import { useState } from "react";
 import { Modal, Button, Input, message } from "antd";
-import { useExpenses } from "../../../../../hooks/useExpenses";
 import "./expense-item.css";
 
 interface ExpenseItemProps {
@@ -23,26 +22,13 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editedExpense, setEditedExpense] = useState(expense);
 
-  const { updateExpenseMutation, deleteExpenseMutation } = useExpenses();
-
   const showEditModal = () => {
     setIsEditModalVisible(true);
   };
 
   const handleEditOk = () => {
-    updateExpenseMutation.mutate(
-      { expenseId: expense._id, expenseData: { ...editedExpense, listId } },
-      {
-        onSuccess: (updatedExpense) => {
-          message.success("Expense updated successfully");
-          onUpdateExpense(updatedExpense._id, updatedExpense.name, updatedExpense.price);
-          setIsEditModalVisible(false);
-        },
-        onError: (error) => {
-          message.error(`Failed to update expense: ${error.message}`);
-        },
-      }
-    );
+    onUpdateExpense(expense._id, editedExpense.name, editedExpense.price,listId);
+    setIsEditModalVisible(false);
   };
 
   const handleEditCancel = () => {
@@ -50,19 +36,8 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({
   };
 
   const handleDelete = () => {
-    deleteExpenseMutation.mutate(
-      { expenseId: expense._id, listId },
-      {
-        onSuccess: () => {
-          message.success("Expense deleted successfully");
-          onDeleteExpense(expense._id);
-          setIsEditModalVisible(false);
-        },
-        onError: (error) => {
-          message.error(`Failed to delete expense: ${error.message}`);
-        },
-      }
-    );
+    onDeleteExpense(expense._id);
+    setIsEditModalVisible(false);
   };
 
   return (

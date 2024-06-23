@@ -111,6 +111,7 @@ export const useExpenses = () => {
           ),
         };
       });
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
     },
   });
 
@@ -151,6 +152,7 @@ export const useExpenses = () => {
           ),
         };
       });
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
     },
     onError: (error) => {
       console.error("Failed to update expense:", error);
@@ -190,6 +192,7 @@ export const useExpenses = () => {
           ),
         };
       });
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
     },
     onError: (error) => {
       console.error("Failed to delete expense:", error);

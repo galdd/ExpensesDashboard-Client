@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Modal, Input, message } from "antd";
-import { useExpenses } from "../../../../../hooks/useExpenses";
-import "./add-expense-item.css";
 import { Expense } from "../../../../../@types/expense";
+import "./add-expense-item.css";
 
 interface AddExpenseItemProps {
   listId: string;
@@ -15,7 +14,6 @@ const AddExpenseItem: React.FC<AddExpenseItemProps> = ({ listId, onAddExpense })
   const [expenseName, setExpenseName] = useState("");
   const [expensePrice, setExpensePrice] = useState(0);
   const [expenseDescription, setExpenseDescription] = useState("");
-  const { addExpenseMutation } = useExpenses();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -32,20 +30,11 @@ const AddExpenseItem: React.FC<AddExpenseItemProps> = ({ listId, onAddExpense })
 
     console.log('Attempting to add expense:', newExpenseData);
 
-    addExpenseMutation.mutate(newExpenseData, {
-      onSuccess: (newExpense) => {
-        message.success("Expense added successfully");
-        console.log('New expense created:', newExpense);
-        setIsModalVisible(false);
-        setExpenseName("");
-        setExpensePrice(0);
-        setExpenseDescription("");
-        onAddExpense(newExpense); // Update the list with the new expense
-      },
-      onError: (error) => {
-        message.error(`Failed to add expense: ${error.message}`);
-      },
-    });
+    onAddExpense(newExpenseData);
+    setIsModalVisible(false);
+    setExpenseName("");
+    setExpensePrice(0);
+    setExpenseDescription("");
   };
 
   const handleCancel = () => {
