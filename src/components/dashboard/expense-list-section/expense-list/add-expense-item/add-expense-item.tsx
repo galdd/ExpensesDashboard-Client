@@ -3,12 +3,14 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Button, Modal, Input, message } from "antd";
 import { useExpenses } from "../../../../../hooks/useExpenses";
 import "./add-expense-item.css";
+import { Expense } from "../../../../../@types/expense";
 
 interface AddExpenseItemProps {
   listId: string;
+  onAddExpense: (expense: Expense) => void;
 }
 
-const AddExpenseItem: React.FC<AddExpenseItemProps> = ({ listId }) => {
+const AddExpenseItem: React.FC<AddExpenseItemProps> = ({ listId, onAddExpense }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [expenseName, setExpenseName] = useState("");
   const [expensePrice, setExpensePrice] = useState(0);
@@ -20,27 +22,30 @@ const AddExpenseItem: React.FC<AddExpenseItemProps> = ({ listId }) => {
   };
 
   const handleOk = () => {
-    addExpenseMutation.mutate(
-      {
-        name: expenseName,
-        price: expensePrice,
-        expenseDescription,
-        date: new Date().toISOString(),
-        listId,
+    const newExpenseData = {
+      name: expenseName,
+      price: expensePrice,
+      expenseDescription,
+      date: new Date().toISOString(),
+      listId,
+    };
+
+    console.log('Attempting to add expense:', newExpenseData);
+
+    addExpenseMutation.mutate(newExpenseData, {
+      onSuccess: (newExpense) => {
+        message.success("Expense added successfully");
+        console.log('New expense created:', newExpense);
+        setIsModalVisible(false);
+        setExpenseName("");
+        setExpensePrice(0);
+        setExpenseDescription("");
+        onAddExpense(newExpense); // Update the list with the new expense
       },
-      {
-        onSuccess: (newExpense) => {
-          message.success("Expense added successfully");
-          setIsModalVisible(false);
-          setExpenseName("");
-          setExpensePrice(0);
-          setExpenseDescription("");
-        },
-        onError: (error) => {
-          message.error(`Failed to add expense: ${error.message}`);
-        },
-      }
-    );
+      onError: (error) => {
+        message.error(`Failed to add expense: ${error.message}`);
+      },
+    });
   };
 
   const handleCancel = () => {

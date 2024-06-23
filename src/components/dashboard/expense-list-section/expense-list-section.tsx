@@ -40,7 +40,7 @@ export const ExpenseListSection = () => {
     updateLists();
   }, [updateLists]);
 
-  const handleDeleteList = (listId: string) => {
+  const handleDelete = (listId: string) => {
     deleteList(listId, {
       onSuccess: () => {
         setLists((prevLists) =>
@@ -54,7 +54,7 @@ export const ExpenseListSection = () => {
     });
   };
 
-  const handleEditList = (listId: string, name: string) => {
+  const handleEdit = (listId: string, name: string) => {
     updateExpenseList(
       { id: listId, name },
       {
@@ -103,6 +103,60 @@ export const ExpenseListSection = () => {
     );
   };
 
+  const handleCreateExpense = (expense) => {
+    setLists((prevLists) =>
+      prevLists.map((list) => {
+        if (list._id === expense.listId) {
+          const updatedTotalExpenses = (list.totalExpenses || 0) + expense.price;
+          return {
+            ...list,
+            expenses: [...list.expenses, expense],
+            totalExpenses: updatedTotalExpenses,
+          };
+        }
+        return list;
+      })
+    );
+  };
+
+  const handleUpdateExpense = (expenseId, name, price) => {
+    setLists((prevLists) =>
+      prevLists.map((list) => {
+        const expenseToUpdate = list.expenses.find((expense) => expense._id === expenseId);
+        if (expenseToUpdate) {
+          const updatedTotalExpenses = list.totalExpenses - expenseToUpdate.price + price;
+          return {
+            ...list,
+            expenses: list.expenses.map((expense) =>
+              expense._id === expenseId
+                ? { ...expense, name, price }
+                : expense
+            ),
+            totalExpenses: updatedTotalExpenses,
+          };
+        }
+        return list;
+      })
+    );
+  };
+
+  const handleDeleteExpense = (expenseId) => {
+    setLists((prevLists) =>
+      prevLists.map((list) => {
+        const expenseToDelete = list.expenses.find((expense) => expense._id === expenseId);
+        if (expenseToDelete) {
+          const updatedTotalExpenses = list.totalExpenses - expenseToDelete.price;
+          return {
+            ...list,
+            expenses: list.expenses.filter((expense) => expense._id !== expenseId),
+            totalExpenses: updatedTotalExpenses,
+          };
+        }
+        return list;
+      })
+    );
+  };
+
   return (
     <DataLoader isLoading={isLoading} error={error}>
       <div className="expense-list-section">
@@ -115,8 +169,11 @@ export const ExpenseListSection = () => {
             <ExpenseList
               key={list._id}
               list={list}
-              onDeleteList={handleDeleteList}
-              onEditList={handleEditList}
+              onDeleteList={handleDelete}
+              onEditList={handleEdit}
+              onAddExpense={handleCreateExpense}
+              onUpdateExpense={handleUpdateExpense}
+              onDeleteExpense={handleDeleteExpense}
             />
           ))}
           {lists.length < (section?.total || 0) && (

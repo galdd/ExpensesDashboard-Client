@@ -10,11 +10,15 @@ import "./expense-item.css";
 interface ExpenseItemProps {
   expense: Expense;
   listId: string;
+  onUpdateExpense: (expenseId: string, name: string, price: number) => void;
+  onDeleteExpense: (expenseId: string) => void;
 }
 
 export const ExpenseItem: React.FC<ExpenseItemProps> = ({
   expense,
   listId,
+  onUpdateExpense,
+  onDeleteExpense,
 }) => {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editedExpense, setEditedExpense] = useState(expense);
@@ -31,6 +35,7 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({
       {
         onSuccess: (updatedExpense) => {
           message.success("Expense updated successfully");
+          onUpdateExpense(updatedExpense._id, updatedExpense.name, updatedExpense.price);
           setIsEditModalVisible(false);
         },
         onError: (error) => {
@@ -50,6 +55,7 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({
       {
         onSuccess: () => {
           message.success("Expense deleted successfully");
+          onDeleteExpense(expense._id);
           setIsEditModalVisible(false);
         },
         onError: (error) => {
