@@ -8,20 +8,24 @@ import "./expense-list.css";
 
 interface ExpenseListProps {
   list: ExpenseListType;
-  onDelete: (id: string) => void;
-  onEdit: (id: string, name: string) => void;
+  onDeleteList: (id: string) => void;
+  onEditList: (id: string, name: string) => void;
 }
 
 export const ExpenseList: React.FC<ExpenseListProps> = React.memo(
-  ({ list, onDelete, onEdit }) => {
+  ({
+    list,
+    onDeleteList,
+    onEditList,
+  }) => {
     return (
       <div className="expenses-list">
         <ExpenseListHeader
           listId={list._id}
           listName={list.name}
           expenseTotal={(list.totalExpenses ? list.totalExpenses : 0).toFixed(2)}
-          onDelete={onDelete}
-          onEdit={onEdit}
+          onDelete={onDeleteList}
+          onEdit={onEditList}
         />
         <ExpensesHeader />
         <div className="separated-expenses-list">

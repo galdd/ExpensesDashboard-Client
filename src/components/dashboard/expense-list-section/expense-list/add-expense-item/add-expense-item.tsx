@@ -29,7 +29,7 @@ const AddExpenseItem: React.FC<AddExpenseItemProps> = ({ listId }) => {
         listId,
       },
       {
-        onSuccess: () => {
+        onSuccess: (newExpense) => {
           message.success("Expense added successfully");
           setIsModalVisible(false);
           setExpenseName("");

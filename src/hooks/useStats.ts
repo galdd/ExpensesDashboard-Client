@@ -1,7 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { apiFetch } from "../../../api";
+import { apiFetch } from "../api";
+
 
 interface Stats {
   totalUsers: number;

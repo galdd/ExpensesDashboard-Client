@@ -29,7 +29,7 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({
     updateExpenseMutation.mutate(
       { expenseId: expense._id, expenseData: { ...editedExpense, listId } },
       {
-        onSuccess: () => {
+        onSuccess: (updatedExpense) => {
           message.success("Expense updated successfully");
           setIsEditModalVisible(false);
         },

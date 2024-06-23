@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth0 } from "@auth0/auth0-react";
 import { apiFetch } from "../api";
 

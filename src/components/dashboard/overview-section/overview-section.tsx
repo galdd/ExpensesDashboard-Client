@@ -5,13 +5,14 @@ import {
   CreditCardOutlined,
 } from "@ant-design/icons";
 import { NotificationHeader } from "./notification/notification-header";
-import { useStats } from "./useStats";
+
 import { StatCard } from "./stat-card";
 import { Notification } from "./notification";
 import { DataLoader } from "../../shared";
 import { useNotifications } from "../../../hooks/useNotifications";
 import { useSocketNotifications } from "../../../hooks/useSocketNotifications";
 import "./overview-section.css";
+import { useStats } from "../../../hooks/useStats";
 
 export const OverviewSection = () => {
   const { data: stats, isLoading, error } = useStats();

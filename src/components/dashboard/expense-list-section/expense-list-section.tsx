@@ -5,7 +5,6 @@ import { ExpenseListType } from "../../../@types/expense-list-prop";
 import { DataLoader } from "../../shared";
 import ExpenseListToolbar from "./expense-list-toolbar/expense-list-toolbar";
 import { ExpenseList } from "./expense-list/expense-list";
-import ChatWindow from "../../shared/ChatWindow/ChatWindow";
 import "./expense-list-section.css";
 import {
   useAddExpenseList,
@@ -13,7 +12,6 @@ import {
   useExpenseLists,
   useUpdateExpenseList,
 } from "../../../hooks/useExpenseLists";
-import useDialogFlow from "../../../hooks/useDialogFlow";
 
 export const ExpenseListSection = () => {
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
@@ -42,7 +40,7 @@ export const ExpenseListSection = () => {
     updateLists();
   }, [updateLists]);
 
-  const handleDelete = (listId: string) => {
+  const handleDeleteList = (listId: string) => {
     deleteList(listId, {
       onSuccess: () => {
         setLists((prevLists) =>
@@ -56,7 +54,7 @@ export const ExpenseListSection = () => {
     });
   };
 
-  const handleEdit = (listId: string, name: string) => {
+  const handleEditList = (listId: string, name: string) => {
     updateExpenseList(
       { id: listId, name },
       {
@@ -105,90 +103,6 @@ export const ExpenseListSection = () => {
     );
   };
 
-  const handleCreateList = (newList) => {
-    const listData = newList.list ? newList.list : newList;
-    setLists((prevLists) => [listData, ...prevLists]);
-  };
-
-  const handleUpdateList = (updatedList) => {
-    setLists((prevLists) =>
-      prevLists.map((list) =>
-        list._id === updatedList._id ? { ...list, name: updatedList.name } : list
-      )
-    );
-  };
-
-  const handleDeleteList = (deletedListId) => {
-    setLists((prevLists) => prevLists.filter((list) => list._id !== deletedListId));
-  };
-
-  const handleReadList = (list) => {
-    setLists((prevLists) =>
-      prevLists.map((prevList) =>
-        prevList._id === list._id ? list : prevList
-      )
-    );
-  };
-
-  const handleCreateExpense = (expense) => {
-    setLists((prevLists) =>
-      prevLists.map((list) =>
-        list._id === expense.listId
-          ? { ...list, expenses: [...list.expenses, expense] }
-          : list
-      )
-    );
-  };
-
-  const handleUpdateExpense = (expenseId, name, amount) => {
-    setLists((prevLists) =>
-      prevLists.map((list) =>
-        list.expenses.some((expense) => expense._id === expenseId)
-          ? {
-              ...list,
-              expenses: list.expenses.map((expense) =>
-                expense._id === expenseId
-                  ? { ...expense, name, amount }
-                  : expense
-              ),
-            }
-          : list
-      )
-    );
-  };
-
-  const handleDeleteExpense = (expenseId) => {
-    setLists((prevLists) =>
-      prevLists.map((list) =>
-        list.expenses.some((expense) => expense._id === expenseId)
-          ? {
-              ...list,
-              expenses: list.expenses.filter((expense) => expense._id !== expenseId),
-            }
-          : list
-      )
-    );
-  };
-
-  const handleReadExpense = (expenses) => {
-    setLists((prevLists) =>
-      prevLists.map((list) =>
-        list._id === expenses.listId ? { ...list, expenses } : list
-      )
-    );
-  };
-
-  const { messages, sendMessage, isLoading: isChatLoading, error: chatError } = useDialogFlow(
-    handleCreateList,
-    handleEdit,
-    handleDeleteList,
-    handleReadList,
-    handleCreateExpense,
-    handleUpdateExpense,
-    handleDeleteExpense,
-    handleReadExpense
-  );
-
   return (
     <DataLoader isLoading={isLoading} error={error}>
       <div className="expense-list-section">
@@ -201,8 +115,8 @@ export const ExpenseListSection = () => {
             <ExpenseList
               key={list._id}
               list={list}
-              onDelete={handleDelete}
-              onEdit={handleEdit}
+              onDeleteList={handleDeleteList}
+              onEditList={handleEditList}
             />
           ))}
           {lists.length < (section?.total || 0) && (
@@ -211,20 +125,6 @@ export const ExpenseListSection = () => {
             </button>
           )}
         </div>
-        <ChatWindow
-          messages={messages}
-          sendMessage={sendMessage}
-          isLoading={isChatLoading}
-          error={chatError}
-          onCreateList={handleCreateList}
-          onUpdateList={handleEdit}
-          onDeleteList={handleDeleteList}
-          onReadList={handleReadList}
-          onCreateExpense={handleCreateExpense}
-          onUpdateExpense={handleUpdateExpense}
-          onDeleteExpense={handleDeleteExpense}
-          onReadExpense={handleReadExpense}
-        />
       </div>
     </DataLoader>
   );

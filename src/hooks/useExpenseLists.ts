@@ -14,7 +14,7 @@ import {
   AddExpenseListVariables,
   UpdateExpenseListVariables,
 } from "../@types/expense-list-prop";
-import { apiFetch } from "..//api";
+import { apiFetch } from "../api";
 import { SortOrder } from "../@types/sortOrderTypes";
 
 const fetchExpenseLists = async (
@@ -40,7 +40,6 @@ const fetchExpenseLists = async (
   }
 
   const data = await response.json();
-  console.log("Fetched expense lists from server:", data); // Log the fetched data
   return data as ExpenseListsResponse;
 };
 
@@ -131,9 +130,8 @@ export const useAddExpenseList = (): UseMutationResult<
       return addExpenseList(token, name);
     },
     onSuccess: (newList) => {
-      console.log("New list added:", newList);
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
       queryClient.setQueryData(["expenseLists"], (oldData: any) => {
-        console.log("Old data in cache (add):", oldData);
         if (!oldData || !oldData.data) {
           return { data: [newList] };
         }
@@ -160,9 +158,8 @@ export const useUpdateExpenseList = (): UseMutationResult<
       return updateExpenseList(token, id, name);
     },
     onSuccess: (updatedList) => {
-      console.log("Updated list received:", updatedList);
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
       queryClient.setQueryData(["expenseLists"], (oldData: any) => {
-        console.log("Old data in cache (update):", oldData);
         if (!oldData || !oldData.data) {
           return { data: [updatedList] };
         }
@@ -204,8 +201,8 @@ export const useDeleteExpenseList = (): UseMutationResult<
       }
     },
     onSuccess: (_, listId) => {
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
       queryClient.setQueryData(["expenseLists"], (oldData: any) => {
-        console.log("Old data in cache (delete):", oldData);
         if (!oldData || !oldData.data) {
           return { data: [] };
         }
