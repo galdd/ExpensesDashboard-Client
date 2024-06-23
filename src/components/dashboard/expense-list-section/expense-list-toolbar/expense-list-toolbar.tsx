@@ -40,7 +40,17 @@ const ExpenseListToolbar = ({
     <>
       <header className="expense-list-toolbar">
         <nav className="tabs">
+          {/*
           {["Personal", "Groups"].map((tabLabel) => (
+            <Tab
+              key={tabLabel}
+              label={tabLabel}
+              isActive={activeTab === tabLabel}
+              onClick={() => handleTabClick(tabLabel)}
+            />
+          ))}
+          */}
+          {["Groups"].map((tabLabel) => (
             <Tab
               key={tabLabel}
               label={tabLabel}
