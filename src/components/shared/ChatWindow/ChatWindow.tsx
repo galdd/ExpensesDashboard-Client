@@ -3,21 +3,11 @@ import { CommentOutlined } from "@ant-design/icons";
 
 import "./ChatWindow.css";
 import useDialogFlow from "../../../hooks/useDialogFlow";
-import { useExpenseLists } from "../../../hooks/useExpenseLists";
 
 const ChatWindow = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
-  const [offset, setOffset] = useState(0);
   const { messages, sendMessage, isLoading, error } = useDialogFlow();
-  const {
-    data: section,
-  } = useExpenseLists(offset, 5, sortOrder);
-
-
-    console.log(section);
-    
-
+  
 
   const handleSend = (message: string) => {
     if (message.trim() === "") return;
