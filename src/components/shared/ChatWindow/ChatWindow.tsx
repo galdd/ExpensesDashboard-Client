@@ -1,40 +1,23 @@
 import React, { useState } from "react";
 import { CommentOutlined } from "@ant-design/icons";
-import useDialogFlow from "../../../hooks/useDialogFlow";
+
 import "./ChatWindow.css";
+import useDialogFlow from "../../../hooks/useDialogFlow";
+import { useExpenseLists } from "../../../hooks/useExpenseLists";
 
-interface ChatWindowProps {
-  onCreateList: (list: any) => void;
-  onUpdateList: (listId: string, name: string) => void;
-  onDeleteList: (listId: string) => void;
-  onReadList: (list: any) => void;
-  onCreateExpense: (expense: any) => void;
-  onUpdateExpense: (expenseId: string, name: string, amount: number) => void;
-  onDeleteExpense: (expenseId: string) => void;
-  onReadExpense: (expenses: any) => void;
-}
-
-const ChatWindow: React.FC<ChatWindowProps> = ({
-  onCreateList,
-  onUpdateList,
-  onDeleteList,
-  onReadList,
-  onCreateExpense,
-  onUpdateExpense,
-  onDeleteExpense,
-  onReadExpense,
-}) => {
+const ChatWindow = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { messages, sendMessage, isLoading, error } = useDialogFlow(
-    onCreateList,
-    onUpdateList,
-    onDeleteList,
-    onReadList,
-    onCreateExpense,
-    onUpdateExpense,
-    onDeleteExpense,
-    onReadExpense
-  );
+  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [offset, setOffset] = useState(0);
+  const { messages, sendMessage, isLoading, error } = useDialogFlow();
+  const {
+    data: section,
+  } = useExpenseLists(offset, 5, sortOrder);
+
+
+    console.log(section);
+    
+
 
   const handleSend = (message: string) => {
     if (message.trim() === "") return;

@@ -110,7 +110,7 @@ export const useExpenseLists = (
   }, [getAccessTokenSilently]);
 
   return useQuery<ExpenseListsResponse, Error>({
-    queryKey: ["expenseLists", token, offset, limit, sortOrder],
+    queryKey: ["expenseLists"],
     queryFn: () => fetchExpenseLists(token!, offset, limit, sortOrder),
     enabled: !!token,
   });
@@ -132,6 +132,7 @@ export const useAddExpenseList = (): UseMutationResult<
     onSuccess: (newList) => {
       queryClient.invalidateQueries({ queryKey: ["stats"] });
       queryClient.setQueryData(["expenseLists"], (oldData: any) => {
+        console.log("Old data:", oldData, "New data:", newList);
         if (!oldData || !oldData.data) {
           return { data: [newList] };
         }

@@ -32,17 +32,7 @@ const sendToDialogFlow = async (message: string, token: string): Promise<DialogF
   return data;
 };
 
-
-export const useDialogFlow = (
-  onCreateList: (list: any) => void,
-  onUpdateList: (listId: string, name: string) => void,
-  onDeleteList: (listId: string) => void,
-  onReadList: (list: any) => void,
-  onCreateExpense: (expense: any) => void,
-  onUpdateExpense: (expenseId: string, name: string, amount: number) => void,
-  onDeleteExpense: (expenseId: string) => void,
-  onReadExpense: (expenses: any) => void
-) => {
+const useDialogFlow = () => {
   const [messages, setMessages] = useState<{ text: string; sender: string }[]>([
     { text: "Hello, I am AI. How can I help you?", sender: "AI" },
   ]);
@@ -54,84 +44,98 @@ export const useDialogFlow = (
       const token = await getAccessTokenSilently();
       return sendToDialogFlow(message, token);
     },
-    onSuccess: (data) => {
-      console.log("Mutation success:", data);
-      if (data && data.response) {
-         setMessages((prevMessages) => [
-           ...prevMessages,
-           { text: data.response, sender: "AI" },
-         ]);
+    onSuccess: (newData) => {
+      console.log("Mutation success:", newData);
+      if (newData && newData.response) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: newData.response, sender: "AI" },
+        ]);
 
-        switch (data.intent) {
+        switch (newData.intent) {
           case "create_list":
-            if (data.parameters?.listName && data.list) {
-              console.log("New list created:", data.list);
-              onCreateList(data.list);
+            if (newData.list) {
+               queryClient.invalidateQueries({ queryKey: ["stats"] }); 
+              queryClient.setQueryData(["expenseLists"], (oldData: any) => {
+                console.log("Old data:", oldData, "New list:", newData.list);
+                if (!oldData || !oldData.data) {
+                  return { data: [newData.list] };
+                }
+                return {
+                  ...oldData,
+                  data: [newData.list, ...oldData.data],
+                };
+              });
             }
             break;
           case "update_list":
-            if (data.list) {
-              console.log("List updated:", data.list);
-              onUpdateList(data.list._id, data.list.name);
+            if (newData.list) {
+              console.log("List updated:", newData.list);
+              queryClient.setQueryData(["expenseLists"], (oldData: any) => {
+                if (!oldData) return { data: [newData.list] };
+                return {
+                  data: oldData.data.map((item: any) =>
+                    item._id === newData.list._id ? newData.list : item
+                  ),
+                };
+              });
             }
             break;
           case "delete_list":
-            if (data.listId) {
-              console.log("List deleted:", data.listId);
-              onDeleteList(data.listId);
+            if (newData.listId) {
+              console.log("List deleted:", newData.listId);
+              queryClient.setQueryData(["expenseLists"], (oldData: any) => {
+                if (!oldData) return { data: [] };
+                return {
+                  data: oldData.data.filter((item: any) => item._id !== newData.listId),
+                };
+              });
             }
             break;
-            case "read_list":
-              if (data.list) {
-                const listObject = data.list;
-                console.log("List read:", data.list);
-                onReadList(listObject);
-                setMessages((prevMessages) => [
-                  ...prevMessages,
-                  { text: `List details: ${formatListDetails(listObject)}`, sender: "AI" },
-                ]);
-              }
-            break;
           case "create_expense":
-            if (data.parameters?.expenseName && data.expense) {
-              console.log("New expense created:", data.expense);
-              onCreateExpense(data.expense);
+            if (newData.expense) {
+              console.log("New expense created:", newData.expense);
+              queryClient.setQueryData(["expenseLists"], (oldData: any) => {
+                return { data: oldData ? [...oldData.data, newData.expense] : [newData.expense] };
+              });
             }
             break;
           case "update_expense":
-            if (data.expense) {
-              console.log("Expense updated:", data.expense);
-              onUpdateExpense(data.expense._id, data.expense.name, data.expense.amount);
+            if (newData.expense) {
+              console.log("Expense updated:", newData.expense);
+              queryClient.setQueryData(["expenseLists"], (oldData: any) => {
+                if (!oldData) return { data: [newData.expense] };
+                return {
+                  data: oldData.data.map((item: any) =>
+                    item._id === newData.expense._id ? { ...item, ...newData.expense } : item
+                  ),
+                };
+              });
             }
             break;
           case "delete_expense":
-            if (data.expenseId) {
-              console.log("Expense deleted:", data.expenseId);
-              onDeleteExpense(data.expenseId);
-            }
-            break;
-          case "read_expense":
-            if (data.response) {
-              console.log("Expenses read:", data.response);
-              onReadExpense(data.response);
+            if (newData.expenseId) {
+              console.log("Expense deleted:", newData.expenseId);
+              queryClient.setQueryData(["expenseLists"], (oldData: any) => {
+                if (!oldData) return { data: [] };
+                return {
+                  data: oldData.data.filter((item: any) => item._id !== newData.expenseId),
+                };
+              });
             }
             break;
           default:
-            console.log("Unknown intent:", data.intent);
+            console.log("Unknown intent:", newData.intent);
         }
       } else {
         throw new Error("Invalid response structure");
       }
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       const errorMessage = error.message || "AI: Sorry, something went wrong.";
-      const errorParts = error.message.split('\n');
-     
-      const parsedError = JSON.parse(errorParts[1]);
-      console.log(parsedError);
       setMessages((prevMessages) => [
         ...prevMessages,
-        { text: `AI: ${parsedError.response}`, sender: "AI" },
+        { text: errorMessage, sender: "AI" },
       ]);
     },
   });
@@ -144,17 +148,6 @@ export const useDialogFlow = (
   return { messages, sendMessage, isLoading: mutation.isLoading, error: mutation.error };
 };
 
-const formatListDetails = (list: any) => {
-  return JSON.stringify(list);
-};
-
-const formatExpenseDetails = (expenses: any) => {
-  let details = `Expenses for List ID: ${expenses.listId}\n`;
-  expenses.forEach((expense: any, index: number) => {
-    details += `  ${index + 1}. ${expense.name} - $${expense.price}\n`;
-  });
-  return details;
-};
 
 
 export default useDialogFlow;

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { message } from "antd";
 import { SortOrder } from "../../../@types/sortOrderTypes";
 import { ExpenseListType } from "../../../@types/expense-list-prop";
@@ -12,6 +12,7 @@ import {
   useExpenseLists,
   useUpdateExpenseList,
 } from "../../../hooks/useExpenseLists";
+import ChatWindow from "../../shared/ChatWindow/ChatWindow";
 
 export const ExpenseListSection = () => {
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
@@ -22,12 +23,16 @@ export const ExpenseListSection = () => {
     isLoading,
     error,
   } = useExpenseLists(offset, 5, sortOrder);
+  
   const { mutate: deleteList } = useDeleteExpenseList();
   const { mutate: addExpenseList } = useAddExpenseList();
   const { mutate: updateExpenseList } = useUpdateExpenseList();
 
   const updateLists = useCallback(() => {
+    console.log("Updating lists");
+    
     if (section?.data) {
+      console.log("Updating lists with data:", section.data);
       if (offset === 0) {
         setLists(section.data);
       } else {
@@ -39,6 +44,10 @@ export const ExpenseListSection = () => {
   useEffect(() => {
     updateLists();
   }, [updateLists]);
+
+  useEffect(() => {
+    console.log("Current lists state:", lists);
+  }, [lists]);
 
   const handleDelete = (listId: string) => {
     deleteList(listId, {
@@ -125,6 +134,7 @@ export const ExpenseListSection = () => {
             </button>
           )}
         </div>
+        <ChatWindow  />
       </div>
     </DataLoader>
   );
