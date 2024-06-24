@@ -5,7 +5,7 @@ import "./ChatWindow.css";
 
 const ChatWindow = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isHelperMinimized, setIsHelperMinimized] = useState(false);
+  const [showHelper, setShowHelper] = useState(true);
   const { messages, sendMessage, isLoading, error } = useDialogFlow();
 
   const handleSend = (message: string) => {
@@ -56,26 +56,29 @@ const ChatWindow = () => {
         <div className="chat-header" onClick={() => setIsOpen(!isOpen)}>
           Chat
         </div>
-        <div className="chat-body">
-          <div className="helper">
-            <div className="helper-header" onClick={() => setIsHelperMinimized(!isHelperMinimized)}>
-              {isHelperMinimized ? "👋 What you can ask me?" : "Click to minimize"}
+        {isOpen && (
+          <div className="chat-helper">
+            <div
+              className="helper-header"
+              onClick={() => setShowHelper(!showHelper)}
+            >
+              {showHelper ? "Minimize helper" : "👋 What you can ask me?"}
             </div>
-            {!isHelperMinimized && (
+            {showHelper && (
               <div className="helper-content">
-          
-            <p>You can ask me to:</p>
-            <ul>
-              <li><strong>List:</strong> Create, update, delete or read a list</li>
-              <li><strong>Expense:</strong> Create, update, delete or read an expense</li>
-            </ul>
-            <p><em>Examples:</em></p>
-            <p>➡️ "Create list Shopping"</p>
-            <p>➡️ "Add expense Milk price 5 to Shopping"</p>
-          </div>
-             
+                <p>You can ask me to:</p>
+                <ul>
+                  <li><strong>List:</strong> Create, update, delete or read a list</li>
+                  <li><strong>Expense:</strong> Create, update, delete or read an expense</li>
+                </ul>
+                <p><em>Examples:</em></p>
+                <p>➡️ "Create list Shopping"</p>
+                <p>➡️ "Add expense Milk price 5 to Shopping"</p>
+              </div>
             )}
           </div>
+        )}
+        <div className="chat-body">
           {messages.map((msg, index) => renderMessageContent(msg, index))}
         </div>
         <div className="chat-footer">

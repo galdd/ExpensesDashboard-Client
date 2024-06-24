@@ -3,8 +3,8 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 400px; /* הגדלת רוחב החלון */
-  height: 500px; /* הגדלת גובה החלון */
+  width: 400px; 
+  height: 500px;
   background: white;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -28,6 +28,42 @@
   text-align: center;
   font-weight: bold;
   cursor: pointer; /* Add cursor pointer to indicate it is clickable */
+}
+
+.chat-helper {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: nowrap; /* Prevent line breaks */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  z-index: 1002; /* Ensuring the helper is on top */
+}
+
+.chat-helper .helper-header {
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.chat-helper .helper-content {
+  white-space: normal;
+}
+
+.chat-helper p {
+  margin: 5px 0;
+}
+
+.chat-helper ul {
+  padding-left: 20px;
+  margin: 5px 0;
+}
+
+.chat-helper ul li {
+  list-style-type: disc;
 }
 
 .chat-body {
@@ -106,42 +142,6 @@
   z-index: 1001;
 }
 
-.chat-window .helper {
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 10px;
-  font-size: 14px;
-  line-height: 1.5;
-  white-space: nowrap; /* Prevent line breaks */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left;
-}
-
-.chat-window .helper-header {
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 5px;
-}
-
-.chat-window .helper-content {
-  white-space: normal;
-}
-
-.chat-window .helper p {
-  margin: 5px 0;
-}
-
-.chat-window .helper ul {
-  padding-left: 20px;
-  margin: 5px 0;
-}
-
-.chat-window .helper ul li {
-  list-style-type: disc;
-}
-
 .chat-window .list-details {
   margin-bottom: 10px;
 }
@@ -150,6 +150,8 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
 }
 
 .chat-window th,
@@ -159,6 +161,20 @@
 }
 
 .chat-window th {
-  background-color: #f2f2f2;
+  background-color: #007bff;
+  color: white;
   text-align: left;
+}
+
+.chat-window td {
+  text-align: left;
+  color: #333;
+}
+
+.chat-window table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.chat-window table tr:hover {
+  background-color: #ddd;
 }
