@@ -55,7 +55,7 @@ const useDialogFlow = () => {
         switch (newData.intent) {
           case "create_list":
             if (newData.list) {
-              queryClient.invalidateQueries({ queryKey: ["stats"] }); 
+              queryClient.invalidateQueries({ queryKey: ["stats"] });
               queryClient.setQueryData(["expenseLists"], (oldData: any) => {
                 console.log("Old data:", oldData, "New list:", newData.list);
                 if (!oldData || !oldData.data) {
@@ -71,7 +71,7 @@ const useDialogFlow = () => {
           case "update_list":
             if (newData.list) {
               console.log("List updated:", newData.list);
-              queryClient.invalidateQueries({ queryKey: ["stats"] }); 
+              queryClient.invalidateQueries({ queryKey: ["stats"] });
               queryClient.setQueryData(["expenseLists"], (oldData: any) => {
                 if (!oldData) return { data: [newData.list] };
                 return {
@@ -82,23 +82,23 @@ const useDialogFlow = () => {
               });
             }
             break;
-            case "read_list":
-              if (newData.list) {
-                console.log("List read:", newData.list);
-                queryClient.invalidateQueries({ queryKey: ["stats"] }); 
-                queryClient.setQueryData(["expenseLists"], (oldData: any) => {
-                  return { data: [newData.list] };
-                });
-                setMessages((prevMessages) => [
-                  ...prevMessages,
-                  { text: `List details: ${JSON.stringify(newData.list, null, 2)}`, sender: "AI" },
-                ]);
-              }
-              break;
+          case "read_list":
+            if (newData.list) {
+              console.log("List read:", newData.list);
+              queryClient.invalidateQueries({ queryKey: ["stats"] });
+              queryClient.setQueryData(["expenseLists"], (oldData: any) => {
+                return { data: [newData.list] };
+              });
+              setMessages((prevMessages) => [
+                ...prevMessages,
+                { text: `List details: ${JSON.stringify(newData.list, null, 2)}`, sender: "AI" },
+              ]);
+            }
+            break;
           case "delete_list":
             if (newData.listId) {
               console.log("List deleted:", newData.listId);
-              queryClient.invalidateQueries({ queryKey: ["stats"] }); 
+              queryClient.invalidateQueries({ queryKey: ["stats"] });
               queryClient.setQueryData(["expenseLists"], (oldData: any) => {
                 if (!oldData) return { data: [] };
                 return {
@@ -108,18 +108,27 @@ const useDialogFlow = () => {
             }
             break;
           case "create_expense":
-            if (newData.expense) {
+            if (newData.expense && newData.listId) {
               console.log("New expense created:", newData.expense);
-              queryClient.invalidateQueries({ queryKey: ["stats"] }); 
+              queryClient.invalidateQueries({ queryKey: ["stats"] });
               queryClient.setQueryData(["expenseLists"], (oldData: any) => {
-                return { data: oldData ? [...oldData.data, newData.expense] : [newData.expense] };
+                if (!oldData) return { data: [] };
+                const updatedLists = oldData.data.map((list: any) =>
+                  list._id === newData.listId
+                    ? { ...list, expenses: [...list.expenses, newData.expense] }
+                    : list
+                );
+                return {
+                  ...oldData,
+                  data: updatedLists,
+                };
               });
             }
             break;
           case "update_expense":
             if (newData.expense) {
               console.log("Expense updated:", newData.expense);
-              queryClient.invalidateQueries({ queryKey: ["stats"] }); 
+              queryClient.invalidateQueries({ queryKey: ["stats"] });
               queryClient.setQueryData(["expenseLists"], (oldData: any) => {
                 if (!oldData) return { data: [newData.expense] };
                 return {
@@ -133,7 +142,7 @@ const useDialogFlow = () => {
           case "delete_expense":
             if (newData.expenseId) {
               console.log("Expense deleted:", newData.expenseId);
-              queryClient.invalidateQueries({ queryKey: ["stats"] }); 
+              queryClient.invalidateQueries({ queryKey: ["stats"] });
               queryClient.setQueryData(["expenseLists"], (oldData: any) => {
                 if (!oldData) return { data: [] };
                 return {
@@ -165,7 +174,5 @@ const useDialogFlow = () => {
 
   return { messages, sendMessage, isLoading: mutation.isLoading, error: mutation.error };
 };
-
-
 
 export default useDialogFlow;
