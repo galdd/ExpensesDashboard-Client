@@ -69,7 +69,7 @@ const ChatWindow = () => {
                 <p>You can ask me to:</p>
                 <ul>
                   <li><strong>List:</strong> Create, update, delete or read a list</li>
-                  <li><strong>Expense:</strong> Create, update, delete or read an expense</li>
+                  <li><strong>Expense:</strong> Create or delete an expense</li>
                 </ul>
                 <p><em>Examples:</em></p>
                 <p>➡️ "Create list Shopping"</p>
