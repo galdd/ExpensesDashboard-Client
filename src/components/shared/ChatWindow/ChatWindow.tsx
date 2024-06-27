@@ -5,7 +5,7 @@ import "./ChatWindow.css";
 
 const ChatWindow = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showHelper, setShowHelper] = useState(true);
+  const [showHelper, setShowHelper] = useState(false);
   const { messages, sendMessage, isLoading, error } = useDialogFlow();
 
   const handleSend = (message: string) => {
@@ -62,7 +62,7 @@ const ChatWindow = () => {
               className="helper-header"
               onClick={() => setShowHelper(!showHelper)}
             >
-              {showHelper ? "Minimize helper" : "👋 What you can ask me?"}
+              {showHelper ? " - Minimize helper -"  : "👋 What you can ask me? click here!"}
             </div>
             {showHelper && (
               <div className="helper-content">
@@ -73,7 +73,11 @@ const ChatWindow = () => {
                 </ul>
                 <p><em>Examples:</em></p>
                 <p>➡️ "Create list Shopping"</p>
-                <p>➡️ "Add expense Milk price 5 to Shopping"</p>
+                <p>➡️ "Update list Shopping to Groceries"</p>
+                <p>➡️ "Delete list Groceries"</p>
+                <p>➡️ "Read list Groceries"</p>
+                <p>➡️ "Add expense Milk price 5 to Groceries"</p>
+                <p>➡️ "Delete expense Milk from Groceries"</p>
               </div>
             )}
           </div>

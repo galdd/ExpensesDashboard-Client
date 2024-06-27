@@ -139,18 +139,28 @@ const useDialogFlow = () => {
               });
             }
             break;
-          case "delete_expense":
-            if (newData.expenseId) {
-              console.log("Expense deleted:", newData.expenseId);
-              queryClient.invalidateQueries({ queryKey: ["stats"] });
-              queryClient.setQueryData(["expenseLists"], (oldData: any) => {
-                if (!oldData) return { data: [] };
-                return {
-                  data: oldData.data.filter((item: any) => item._id !== newData.expenseId),
-                };
-              });
-            }
-            break;
+            case "delete_expense":
+              if (newData.expenseId && newData.listId) {
+                console.log("Expense deleted:", newData.expenseId, newData.listId);
+                queryClient.invalidateQueries({ queryKey: ["expenseLists"] });
+                queryClient.setQueryData(["expenseLists"], (oldData: any) => {
+                  if (!oldData) return { data: [] };
+                  console.log("Old data before update:", oldData);
+                  const updatedData = oldData.data.map((list: any) => {
+                    if (list._id === newData.listId) {
+                      return {
+                        ...list,
+                        expenses: list.expenses.filter((expense: any) => expense._id !== newData.expenseId),
+                      };
+                    }
+                    return list;
+                  });
+                  console.log("Updated data after update:", updatedData);
+                  return { data: updatedData };
+                });
+              }
+              break;
+              
           default:
             console.log("Unknown intent:", newData.intent);
         }
