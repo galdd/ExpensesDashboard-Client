@@ -4,14 +4,15 @@ import "./notification-header.css";
 
 type Props = {
   clearNotifications: () => void;
+  notificationCount: number;
 };
 
-export const NotificationHeader = ({ clearNotifications }: Props) => {
+export const NotificationHeader = ({ clearNotifications, notificationCount }: Props) => {
   return (
     <header className="notifications-header-container">
       <div className="notifications-header-wrapper">
         <BellOutlined className="notifications-icon" />
-        <h2 className="notifications-title">Notifications</h2>
+        <h2 className="notifications-title">Notifications ({notificationCount})</h2>
       </div>
       <div>
         <Button

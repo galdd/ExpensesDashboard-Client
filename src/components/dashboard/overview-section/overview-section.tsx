@@ -25,6 +25,8 @@ export const OverviewSection = () => {
   } = useNotifications();
   useSocketNotifications(setNotifications, clearNotifications);
 
+  const notificationCount = notifications?.length ?? 0;
+
   return (
     <DataLoader
       isLoading={isLoading || isNotificationsLoading}
@@ -64,7 +66,10 @@ export const OverviewSection = () => {
           />
         </div>
         <div className="notification-card">
-          <NotificationHeader clearNotifications={clearNotifications} />
+          <NotificationHeader 
+            clearNotifications={clearNotifications}
+            notificationCount={notificationCount}
+          />
           <Notification notifications={notifications || []} />
         </div>
       </div>
