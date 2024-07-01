@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { CommentOutlined } from "@ant-design/icons";
 import useDialogFlow from "../../../hooks/useDialogFlow";
 import "./ChatWindow.css";
@@ -7,6 +7,7 @@ const ChatWindow = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showHelper, setShowHelper] = useState(false);
   const { messages, sendMessage, isLoading, error } = useDialogFlow();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const handleSend = (message: string) => {
     if (message.trim() === "") return;
@@ -50,6 +51,12 @@ const ChatWindow = () => {
     );
   };
 
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   return (
     <>
       <div className={`chat-window ${isOpen ? "open" : ""}`}>
@@ -62,7 +69,7 @@ const ChatWindow = () => {
               className="helper-header"
               onClick={() => setShowHelper(!showHelper)}
             >
-              {showHelper ? " - Minimize helper -"  : "👋 What you can ask me? click here!"}
+              {showHelper ? " - Minimize helper -" : "👋 What you can ask me? click here!"}
             </div>
             {showHelper && (
               <div className="helper-content">
@@ -84,6 +91,7 @@ const ChatWindow = () => {
         )}
         <div className="chat-body">
           {messages.map((msg, index) => renderMessageContent(msg, index))}
+          <div ref={messagesEndRef} />
         </div>
         <div className="chat-footer">
           <input

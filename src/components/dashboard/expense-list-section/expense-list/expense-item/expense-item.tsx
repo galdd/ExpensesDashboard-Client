@@ -3,7 +3,7 @@ import { Expense } from "../../../../../@types/expense";
 import { UserPicture } from "../../../../shared";
 import { formatDate, formatTime } from "../../../../../utilities/format-time";
 import { useState } from "react";
-import { Modal, Button, Input, message } from "antd";
+import { Modal, Button, Input } from "antd";
 import "./expense-item.css";
 
 interface ExpenseItemProps {
@@ -27,7 +27,7 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({
   };
 
   const handleEditOk = () => {
-    onUpdateExpense(expense._id, editedExpense.name, editedExpense.price,listId);
+    onUpdateExpense(expense._id, editedExpense.name, editedExpense.price);
     setIsEditModalVisible(false);
   };
 
@@ -41,7 +41,7 @@ export const ExpenseItem: React.FC<ExpenseItemProps> = ({
   };
 
   return (
-    <div className={`expense-item`} key={expense._id}>
+    <div className="expense-item" key={expense._id}>
       <UserPicture
         creatorImageUrl={expense.creator.photo}
         creatorName={expense.creator.name}

@@ -94,7 +94,9 @@ export const useExpenses = () => {
     mutationFn: async (expenseData: NewExpense) => {
       if (!token) throw new Error("No access token");
       console.log("Adding expense with data:", expenseData); // Add log
-      return addExpense(token, expenseData);
+      const response = await addExpense(token, expenseData);
+      console.log("Response data:", response); // Add log
+      return response;
     },
     onSuccess: (newExpense) => {
       console.log("Expense added successfully:", newExpense); // Add log
@@ -112,6 +114,10 @@ export const useExpenses = () => {
         };
       });
       queryClient.invalidateQueries({ queryKey: ["stats"] });
+    },
+    onError: (error) => {
+      console.error("Failed to add expense:", error);
+      message.error(`Failed to add expense: ${error.message}`);
     },
   });
 
@@ -156,6 +162,7 @@ export const useExpenses = () => {
     },
     onError: (error) => {
       console.error("Failed to update expense:", error);
+      message.error(`Failed to update expense: ${error.message}`);
     },
   });
 
@@ -196,6 +203,7 @@ export const useExpenses = () => {
     },
     onError: (error) => {
       console.error("Failed to delete expense:", error);
+      message.error(`Failed to delete expense: ${error.message}`);
     },
   });
 
